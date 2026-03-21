@@ -10,12 +10,14 @@ import CoreData
 
 @main
 struct DuoDashApp: App {
-    let persistenceController = PersistenceController.shared
-
+    // Wir initialisieren unseren CoreDataManager als StateObject, damit er am Leben bleibt
+    @StateObject private var coreDataManager = CoreDataManager.shared
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            // Hier injizieren wir den viewContext in die SwiftUI-Umgebung
+                .environment(\.managedObjectContext, coreDataManager.container.viewContext)
         }
     }
 }
