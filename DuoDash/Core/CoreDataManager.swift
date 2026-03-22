@@ -34,14 +34,14 @@ class CoreDataManager: ObservableObject {
         
         // -- Konfiguration A: Der Private Store --
         let privateStore = NSPersistentStoreDescription(url: storeURL)
-        privateStore.configuration = "Default" // Wenn du in Xcode keine eigenen Configs angelegt hast, ist "Default" richtig
+        //privateStore.configuration = "Default" // Wenn du in Xcode keine eigenen Configs angelegt hast, ist "Default" richtig
         privateStore.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
         privateStore.cloudKitContainerOptions?.databaseScope = .private
         
         // -- Konfiguration B: Der Shared Store (Für CloudKit Sharing zwingend nötig) --
         let sharedStoreURL = storeURL.deletingLastPathComponent().appendingPathComponent("shared.sqlite")
         let sharedStore = NSPersistentStoreDescription(url: sharedStoreURL)
-        sharedStore.configuration = "Default" // Gleiches Schema für den Shared Store
+        //sharedStore.configuration = "Default" // Gleiches Schema für den Shared Store
         let sharedOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
         sharedOptions.databaseScope = .shared
         sharedStore.cloudKitContainerOptions = sharedOptions
@@ -63,17 +63,76 @@ class CoreDataManager: ObservableObject {
     }
     
     func createSharedSpace() {
-            let context = container.viewContext
-            
-            let newSpace = SharedSpace(context: context)
-            newSpace.id = UUID()
-            newSpace.joinDate = Date()
-            
-            do {
-                try context.save()
-                print("🎉 Neuer SharedSpace wurde manuell erstellt!")
-            } catch {
-                print("❌ Fehler beim Erstellen des SharedSpace: \(error.localizedDescription)")
+        let context = container.viewContext
+        
+        let newSpace = SharedSpace(context: context)
+        newSpace.id = UUID()
+        newSpace.joinDate = Date()
+        
+        do {
+            try context.save()
+            print("🎉 Neuer SharedSpace wurde manuell erstellt!")
+        } catch {
+            print("❌ Fehler beim Erstellen des SharedSpace: \(error.localizedDescription)")
+        }
+    }
+    
+    // Erstellt den Share aktiv und gibt ihn über einen Callback (Completion Handler) zurück
+    func createShare(for space: SharedSpace, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) {
+        print("⏳ Starte manuelle Share-Erstellung...")
+        
+        do {
+            // 1. Wir sagen Core Data: "Erstelle ein Share-Objekt für diesen Bereich"
+            try container.share([space], to: nil) { objectIDs, share, cloudKitContainer, error in
+                
+                if let error = error {
+                    print("🔥 FEHLER bei container.share: \(error.localizedDescription)")
+                    DispatchQueue.main.async { completion(nil, nil, error) }
+                    return
+                }
+                
+                if let share = share {
+                    print("✅ Share-Objekt im Speicher erstellt. Titel wird gesetzt...")
+                    share[CKShare.SystemFieldKey.title] = "Komm in unseren DuoDash Bereich!" as CKRecordValue?
+                    
+                    // 2. WICHTIG: Wir erzwingen jetzt das Speichern des Core Data Contexts!
+                    // Nur so weiß das System, dass es das neue Share-Objekt auch wirklich in die Cloud hochladen muss.
+                    let context = self.container.viewContext
+                    context.perform {
+                        do {
+                            if context.hasChanges {
+                                try context.save()
+                                print("💾 Core Data Context gespeichert. Share wird an Apple übergeben...")
+                            }
+                            DispatchQueue.main.async { completion(share, cloudKitContainer, nil) }
+                        } catch {
+                            print("🔥 FEHLER beim Speichern des Contexts: \(error.localizedDescription)")
+                            DispatchQueue.main.async { completion(nil, nil, error) }
+                        }
+                    }
+                }
+            }
+        } catch {
+            print("🔥 DO-CATCH FEHLER: \(error.localizedDescription)")
+            DispatchQueue.main.async { completion(nil, nil, error) }
+        }
+    }
+    
+    
+    func acceptShare(metadata: CKShare.Metadata) {
+        // 1. Finde den "Shared Store", den wir ganz am Anfang definiert haben
+        guard let sharedStore = container.persistentStoreCoordinator.persistentStores.first(where: { $0.url?.lastPathComponent == "shared.sqlite" }) else {
+            print("❌ Konnte den Shared Store nicht finden!")
+            return
+        }
+        
+        // 2. Sag Core Data: "Hier ist das Ticket, lade die fremden Daten in meinen Shared Store herunter!"
+        container.acceptShareInvitations(from: [metadata], into: sharedStore) { metadatas, error in
+            if let error = error {
+                print("🔥 Fehler beim Akzeptieren des Shares: \(error.localizedDescription)")
+            } else {
+                print("✅ Share erfolgreich akzeptiert und Daten werden im Hintergrund geladen!")
             }
         }
+    }
 }

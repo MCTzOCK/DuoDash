@@ -13,6 +13,8 @@ struct DuoDashApp: App {
     // Wir initialisieren unseren CoreDataManager als StateObject, damit er am Leben bleibt
     @StateObject private var coreDataManager = CoreDataManager.shared
     
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
