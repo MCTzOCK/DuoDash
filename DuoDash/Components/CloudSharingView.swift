@@ -20,7 +20,7 @@ struct CloudSharingView: UIViewControllerRepresentable {
         // Wir initialisieren den Controller einfach direkt mit den fertigen Daten
         let controller = UICloudSharingController(share: share, container: container)
         
-        controller.availablePermissions = [.allowReadWrite, .allowPublic, .allowPrivate]
+        controller.availablePermissions = [.allowPublic, .allowReadWrite, .allowPrivate]
         controller.delegate = context.coordinator
         return controller
     }

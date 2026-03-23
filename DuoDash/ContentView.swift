@@ -16,13 +16,28 @@ struct ContentView: View {
     private var spaces: FetchedResults<SharedSpace>
     
     var body: some View {
-        Group {
+        NavigationStack {
             if spaces.isEmpty {
-                // Nutzer hat noch keinen Bereich -> Onboarding
                 OnboardingView()
             } else {
-                // Nutzer hat einen Bereich (selbst erstellt oder per Link beigetreten)
-                DashboardView(currentSpace: spaces.first!)
+                List {
+                    ForEach(spaces) { space in
+                        NavigationLink(destination: DashboardView(currentSpace: space)) {
+                            Text(space.id != nil ? String(describing: space.id) : "Unbenannter Bereich")
+                                .font(.headline)
+                        }
+                    }
+                }
+                .navigationTitle("Deine Bereiche")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(action: {
+                            CoreDataManager.shared.createSharedSpace()
+                        }) {
+                            Image(systemName: "plus")
+                        }
+                    }
+                }
             }
         }
     }

@@ -65,9 +65,11 @@
         <relationship name="space" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SharedSpace" inverseName="profiles" inverseEntity="SharedSpace"/>
     </entity>
     <entity name="SharedSpace" representedClassName="SharedSpace" syncable="YES">
+        <attribute name="emoji" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="joinDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="metadata" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="calendarEvents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CalendarEvent" inverseName="space" inverseEntity="CalendarEvent"/>
         <relationship name="countdowns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Countdown" inverseName="space" inverseEntity="Countdown"/>
         <relationship name="dateIdeas" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DateIdea" inverseName="space" inverseEntity="DateIdea"/>

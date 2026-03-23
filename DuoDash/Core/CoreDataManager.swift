@@ -8,6 +8,7 @@
 import CoreData
 import CloudKit
 import Combine
+import UIKit
 
 class CoreDataManager: ObservableObject {
     // 1. Singleton-Instanz für einfachen Zugriff überall in der App
@@ -93,7 +94,10 @@ class CoreDataManager: ObservableObject {
                 
                 if let share = share {
                     print("✅ Share-Objekt im Speicher erstellt. Titel wird gesetzt...")
-                    share[CKShare.SystemFieldKey.title] = "Komm in unseren DuoDash Bereich!" as CKRecordValue?
+                    share[CKShare.SystemFieldKey.title] = "DuoDash Bereich" as CKRecordValue?
+                    share[CKShare.SystemFieldKey.thumbnailImageData] = UIImage(systemName: "person.2.fill")?.jpegData(compressionQuality: 1) as CKRecordValue?
+                    share[CKShare.SystemFieldKey.shareType] = "com.bensiebert.duodash.sharedspace" as CKRecordValue?
+                    //share.publicPermission = .readWrite
                     
                     // 2. WICHTIG: Wir erzwingen jetzt das Speichern des Core Data Contexts!
                     // Nur so weiß das System, dass es das neue Share-Objekt auch wirklich in die Cloud hochladen muss.
