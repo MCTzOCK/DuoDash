@@ -33,14 +33,14 @@ struct SpaceNavigationStack: View {
                 Label("Dashboard", systemImage: "house")
             }
             Tab {
+                UsView(space: space)
+            } label: {
+                Label("Wir", systemImage: "heart.fill")
+            }
+            Tab {
                 
             } label: {
                 Label("Organisation", systemImage: "checklist")
-            }
-            Tab {
-                DateOverviewView(space: space)
-            } label: {
-                Label("Dates", systemImage: "wineglass.fill")
             }
             Tab {
                 SpaceMoreView(space: space, openSettings: showSettings)

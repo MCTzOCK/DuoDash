@@ -145,4 +145,11 @@ class CoreDataManager: ObservableObject {
     }
     
     
+    func getCurrentUserId() async throws -> String {
+        let ckContainer = CKContainer(identifier: "iCloud.com.bensiebert.DuoDash")
+        
+        let userRecordId = try await ckContainer.userRecordID()
+        
+        return userRecordId.recordName
+    }
 }
