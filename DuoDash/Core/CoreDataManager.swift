@@ -52,6 +52,8 @@ class CoreDataManager: ObservableObject {
         
         // 5. Stores laden
         container.loadPersistentStores { (storeDescription, error) in
+            
+            storeDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
             if let error = error as NSError? {
                 // In einer echten Prod-App würdest du hier Crashlytics nutzen, statt fatalError
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -141,4 +143,6 @@ class CoreDataManager: ObservableObject {
             }
         }
     }
+    
+    
 }

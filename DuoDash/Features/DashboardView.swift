@@ -21,6 +21,8 @@ struct DashboardView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Spacer()
+                TogetherStatsCard(space: currentSpace)
+                
                 
                 Image(systemName: "heart.fill")
                     .font(.system(size: 60))

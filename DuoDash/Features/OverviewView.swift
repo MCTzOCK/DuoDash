@@ -25,6 +25,7 @@ struct OverviewView: View {
     @State private var selectedSpace: SharedSpace? = nil
     @State private var renameText: String = ""
     @State private var renameEmoji: String = "❤️"
+    @State private var renameJoinDate: Date = Date()
     
     // State for deleting
     @State private var confirmDeleteVisible = false
@@ -34,7 +35,7 @@ struct OverviewView: View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                 ForEach(spaces) { space in
-                    NavigationLink(destination: DashboardView(currentSpace: space)) {
+                    NavigationLink(destination: SpaceNavigationStack(space: space)) {
                         SharedSpaceCard(space: space)
                     }
                     .contextMenu {
@@ -68,10 +69,11 @@ struct OverviewView: View {
         }
         // ✅ MOVED CONTENT TO SUBVIEW
         .sheet(isPresented: $renameSheetVisible) {
-            RenameSpaceSheet(
+            SpaceSettingsSheet(
                 isVisible: $renameSheetVisible,
                 renameText: $renameText,
                 renameEmoji: $renameEmoji,
+                joinDate: $renameJoinDate,
                 onSave: saveRename
             )
         }
@@ -88,6 +90,7 @@ struct OverviewView: View {
         selectedSpace = space
         renameText = space.title ?? ""
         renameEmoji = space.emoji ?? "❤️"
+        renameJoinDate = space.joinDate ?? Date()
         renameSheetVisible = true
     }
 
@@ -95,6 +98,7 @@ struct OverviewView: View {
         guard let space = selectedSpace else { return }
         space.title = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
         space.emoji = renameEmoji
+        space.joinDate = renameJoinDate
         
         do {
             try viewContext.save()
@@ -112,51 +116,6 @@ struct OverviewView: View {
         spaceToDelete = nil
     }
 }
-
-// ✅ EXTRACTED SUBVIEW (Solves the complexity error)
-struct RenameSpaceSheet: View {
-    @Binding var isVisible: Bool
-    @Binding var renameText: String
-    @Binding var renameEmoji: String
-    var onSave: () -> Void
-    
-    @State private var showPicker = false
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Name")) {
-                    TextField("Name", text: $renameText)
-                }
-                Section(header: Text("Emoji")) {
-                    Button(renameEmoji) {
-                        showPicker = true
-                    }
-                    .emojiPicker(isPresented: $showPicker, selectedEmoji: $renameEmoji)
-                    .padding(16)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                }
-            }
-            .navigationTitle("Einstellungen")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { isVisible = false }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        onSave()
-                    } label: {
-                        // ✅ FIXED LABEL ERROR HERE
-                        Label("Speichern", systemImage: "checkmark")
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-            }
-        }
-    }
-}
-
 
 
 private struct SharedSpaceCard: View {
