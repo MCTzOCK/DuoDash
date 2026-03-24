@@ -30,7 +30,7 @@ struct CountdownCard: View {
                     .allowsHitTesting(false) // Let clicks pass through
             }
         }
-        .background(cardColor)
+        .background(Color(UIColor.systemBackground))
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         .padding()

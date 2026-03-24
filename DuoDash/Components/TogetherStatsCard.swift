@@ -11,6 +11,8 @@ struct TogetherStatsCard: View {
     
     @ObservedObject var space: SharedSpace
     
+    @Environment(\.colorScheme) var colorScheme
+    
     let cardColor = Color(red: 0.95, green: 0.95, blue: 0.97) // Helles Grau
     let accentColor = Color.accent
     
@@ -95,7 +97,7 @@ struct TogetherStatsCard: View {
             }
             .padding(.bottom, 20)
         }
-        .background(cardColor)
+        .background(Color(UIColor.secondarySystemFill))
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         .padding()
