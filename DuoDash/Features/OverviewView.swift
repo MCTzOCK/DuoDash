@@ -74,6 +74,7 @@ struct OverviewView: View {
                 renameText: $renameText,
                 renameEmoji: $renameEmoji,
                 joinDate: $renameJoinDate,
+                space: selectedSpace ?? SharedSpace(),
                 onSave: saveRename
             )
         }

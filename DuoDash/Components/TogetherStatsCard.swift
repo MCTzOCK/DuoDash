@@ -144,6 +144,7 @@ struct SingleStatRow: View {
             Text(numberFormatter.string(from: NSNumber(value: value)) ?? "\(value)")
                 .font(.system(.body, design: .monospaced))
                 .fontWeight(.semibold)
+                .foregroundStyle(.accent)
             
             Text(unit)
                 .font(.body)

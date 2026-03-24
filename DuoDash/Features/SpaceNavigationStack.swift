@@ -6,10 +6,24 @@
 //
 
 import SwiftUI
+import CoreData
+import CloudKit
 
 struct SpaceNavigationStack: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject public var space: SharedSpace
     
+    @State private var settingsSheetVisible = false
+    @State private var renameText: String = ""
+    @State private var renameEmoji: String = "❤️"
+    @State private var renameJoinDate: Date = Date()
+    
+    @State private var isShowingShareSheet = false
+    @State private var isSharing = false // Für den Lade-Spinner
+    
+    // Hier speichern wir den fertigen Share temporär
+    @State private var activeShare: CKShare?
+    @State private var activeContainer: CKContainer?
     
     var body: some View {
         TabView {
@@ -29,13 +43,69 @@ struct SpaceNavigationStack: View {
                 Label("Dates", systemImage: "wineglass.fill")
             }
             Tab {
-                
+                SpaceMoreView(space: space)
             } label: {
                 Label("Mehr", systemImage: "ellipsis")
             }
         }
         .navigationTitle(space.title ?? "DuoDash")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(action: {
+                    renameText = space.title ?? "DuoDash"
+                    renameEmoji = space.emoji ?? "❤️"
+                    renameJoinDate = space.joinDate ?? Date()
+                    settingsSheetVisible = true
+                }) {
+                    Image(systemName: "gear")
+                }
+            }
+        }
+        .sheet(isPresented: $settingsSheetVisible) {
+            SpaceSettingsSheet(isVisible: $settingsSheetVisible, renameText: $renameText, renameEmoji: $renameEmoji, joinDate: $renameJoinDate, space: space, onSave: saveRename)
+        }
+        .sheet(isPresented: $isShowingShareSheet) {
+            if let share = activeShare, let container = activeContainer {
+                CloudSharingView(share: share, container: container)
+            }
+        }
     }
     
+    private func saveRename() {
+        
+        space.title = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        space.emoji = renameEmoji
+        space.joinDate = renameJoinDate
+        
+        do {
+            try viewContext.save()
+        } catch {
+            print("Fehler: \(error.localizedDescription)")
+            viewContext.rollback()
+        }
+        settingsSheetVisible = false
+    }
+    
+    
+    // Die neue Logik für den Button
+    private func startSharingProcess() {
+        isSharing = true
+        
+        CoreDataManager.shared.createShare(for: space) { share, container, error in
+            isSharing = false
+            
+            if let error = error {
+                print("❌ Sharing im UI fehlgeschlagen: \(error.localizedDescription)")
+                // Hier könntest du später einen Alert für den User einbauen
+                return
+            }
+            
+            if let share = share, let container = container {
+                self.activeShare = share
+                self.activeContainer = container
+                self.isShowingShareSheet = true // Jetzt das Sheet öffnen!
+            }
+        }
+    }
 }

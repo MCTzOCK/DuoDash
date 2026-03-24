@@ -19,7 +19,7 @@ extension Countdown {
     }
 
     @NSManaged public var id: UUID?
-    @NSManaged public var imageData: UUID?
+    @NSManaged public var imageData: Data?
     @NSManaged public var metadata: Data?
     @NSManaged public var targetDate: Date?
     @NSManaged public var title: String?
