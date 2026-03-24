@@ -1,8 +1,8 @@
 //
 //  DateIdea+CoreDataProperties.swift
-//  DuoDash
+//  
 //
-//  Created by Ben Siebert on 23.03.26.
+//  Created by Ben Siebert on 24.03.26.
 //
 //
 
@@ -19,9 +19,12 @@ extension DateIdea {
     }
 
     @NSManaged public var id: UUID?
+    @NSManaged public var imageData: Data?
     @NSManaged public var isDone: Bool
+    @NSManaged public var location: String?
     @NSManaged public var metadata: Data?
     @NSManaged public var priceLevel: Int16
+    @NSManaged public var text: String?
     @NSManaged public var title: String?
     @NSManaged public var urlString: String?
     @NSManaged public var space: SharedSpace?

@@ -18,6 +18,10 @@ struct DateOverviewView: View {
         ScrollView {
             VStack(spacing: 20) {
                 
+                ForEach(space.dateIdeas?.allObjects as! [DateIdea]) { dateIdea in
+                    Text(dateIdea.title ?? "Unbenanntes Date")
+                }
+                
                 if space.dateIdeas?.allObjects.count == 0 {
                     ContentUnavailableView {
                         Label("Keine Dates", systemImage: "wineglass")
@@ -50,7 +54,7 @@ struct DateOverviewView: View {
             }
         }
         .sheet(isPresented: $showCreateSheet) {
-            
+            CreateDateView(space: space)
         }
     }
 }
