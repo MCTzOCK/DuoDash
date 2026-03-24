@@ -33,7 +33,7 @@ struct CountdownOverviewView: View {
                             Button() {
                                 showingAddCountdownSheet = true
                             } label: {
-                                Text("Countdown erstellen")
+                                Label("Countdown erstellen", systemImage: "plus")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .padding()
@@ -105,8 +105,9 @@ struct CountdownRow: View {
                     Text(countdown.targetDate.map { CountdownRow.formattedTimeRemaining(until: $0) } ?? "—")
                         .font(.headline)
                         .foregroundStyle(.white)
-                        .lineLimit(1)
-                        .fixedSize()
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .frame(width: 120)
                         .padding(.trailing, 16)
                     
                     

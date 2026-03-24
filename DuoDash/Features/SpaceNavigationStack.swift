@@ -38,12 +38,12 @@ struct SpaceNavigationStack: View {
                 Label("Organisation", systemImage: "checklist")
             }
             Tab {
-                
+                DateOverviewView(space: space)
             } label: {
                 Label("Dates", systemImage: "wineglass.fill")
             }
             Tab {
-                SpaceMoreView(space: space)
+                SpaceMoreView(space: space, openSettings: showSettings)
             } label: {
                 Label("Mehr", systemImage: "ellipsis")
             }
@@ -53,10 +53,7 @@ struct SpaceNavigationStack: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button(action: {
-                    renameText = space.title ?? "DuoDash"
-                    renameEmoji = space.emoji ?? "❤️"
-                    renameJoinDate = space.joinDate ?? Date()
-                    settingsSheetVisible = true
+                    showSettings()
                 }) {
                     Image(systemName: "gear")
                 }
@@ -70,6 +67,13 @@ struct SpaceNavigationStack: View {
                 CloudSharingView(share: share, container: container)
             }
         }
+    }
+    
+    private func showSettings() {
+        renameText = space.title ?? "DuoDash"
+        renameEmoji = space.emoji ?? "❤️"
+        renameJoinDate = space.joinDate ?? Date()
+        settingsSheetVisible = true
     }
     
     private func saveRename() {

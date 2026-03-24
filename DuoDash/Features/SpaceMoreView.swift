@@ -11,6 +11,8 @@ struct SpaceMoreView: View {
     
     @ObservedObject var space: SharedSpace
     
+    var openSettings: () -> Void
+    
     var body: some View {
         List {
             Section("Funktionen") {
@@ -19,7 +21,11 @@ struct SpaceMoreView: View {
                 }
             }
             Section("Einstellungen") {
-                SettingsInfoRow(icon: "gear", color: .blue, title: "Bereich verwalten", value: "")
+                Button {
+                    openSettings()
+                } label: {
+                    SettingsInfoRow(icon: "gear", color: .blue, title: "Bereich verwalten", value: "")
+                }
             }
         }
     }
