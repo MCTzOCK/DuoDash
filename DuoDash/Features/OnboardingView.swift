@@ -7,13 +7,16 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    
+    @State private var showSheet = false
+    
     var body: some View {
         VStack(spacing: 30) {
             Spacer()
             
             Image(systemName: "person.2.fill")
                 .font(.system(size: 80))
-                .foregroundColor(.blue)
+                .foregroundColor(.accentColor)
             
             Text("Willkommen bei DuoDash")
                 .font(.largeTitle)
@@ -28,20 +31,22 @@ struct OnboardingView: View {
             
             Spacer()
             
-            // HIER triggern wir die manuelle Erstellung!
             Button(action: {
-                CoreDataManager.shared.createSharedSpace()
+                showSheet = true
             }) {
                 Text("Neuen Bereich erstellen")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color.accent)
                     .cornerRadius(12)
             }
             .padding(.horizontal, 40)
             .padding(.bottom, 50)
+            .sheet(isPresented: $showSheet) {
+                CreateSpaceView()
+            }
         }
     }
 }

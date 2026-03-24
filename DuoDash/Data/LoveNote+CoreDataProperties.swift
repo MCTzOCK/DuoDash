@@ -2,7 +2,7 @@
 //  LoveNote+CoreDataProperties.swift
 //  DuoDash
 //
-//  Created by Ben Siebert on 21.03.26.
+//  Created by Ben Siebert on 23.03.26.
 //
 //
 
@@ -18,11 +18,11 @@ extension LoveNote {
         return NSFetchRequest<LoveNote>(entityName: "LoveNote")
     }
 
-    @NSManaged public var id: UUID?
-    @NSManaged public var metadata: Data?
-    @NSManaged public var message: String?
-    @NSManaged public var createdAt: Date?
     @NSManaged public var authorId: String?
+    @NSManaged public var createdAt: Date?
+    @NSManaged public var id: UUID?
+    @NSManaged public var message: String?
+    @NSManaged public var metadata: Data?
     @NSManaged public var space: SharedSpace?
 
 }

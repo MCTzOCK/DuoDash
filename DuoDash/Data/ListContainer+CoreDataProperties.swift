@@ -2,7 +2,7 @@
 //  ListContainer+CoreDataProperties.swift
 //  DuoDash
 //
-//  Created by Ben Siebert on 21.03.26.
+//  Created by Ben Siebert on 23.03.26.
 //
 //
 

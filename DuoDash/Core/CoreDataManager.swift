@@ -63,12 +63,14 @@ class CoreDataManager: ObservableObject {
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
     
-    func createSharedSpace() {
+    func createSharedSpace(title: String, emoji: String) {
         let context = container.viewContext
         
         let newSpace = SharedSpace(context: context)
         newSpace.id = UUID()
         newSpace.joinDate = Date()
+        newSpace.title = title
+        newSpace.emoji = emoji
         
         do {
             try context.save()

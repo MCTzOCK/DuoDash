@@ -1,0 +1,15 @@
+{
+  "originHash" : "5050a3979ea6b0ad5bd1982860c9eefac109606b35190c0c6a580aa5e23f0cb4",
+  "pins" : [
+    {
+      "identity" : "swiftemojipicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sergius-la/SwiftEmojiPicker",
+      "state" : {
+        "revision" : "c1091a476d98a26ff4ee11eaeba3fe742e88d672",
+        "version" : "2.2.1"
+      }
+    }
+  ],
+  "version" : 3
+}

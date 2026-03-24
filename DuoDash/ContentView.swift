@@ -20,24 +20,7 @@ struct ContentView: View {
             if spaces.isEmpty {
                 OnboardingView()
             } else {
-                List {
-                    ForEach(spaces) { space in
-                        NavigationLink(destination: DashboardView(currentSpace: space)) {
-                            Text(space.id != nil ? String(describing: space.id) : "Unbenannter Bereich")
-                                .font(.headline)
-                        }
-                    }
-                }
-                .navigationTitle("Deine Bereiche")
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(action: {
-                            CoreDataManager.shared.createSharedSpace()
-                        }) {
-                            Image(systemName: "plus")
-                        }
-                    }
-                }
+                OverviewView()
             }
         }
     }

@@ -2,7 +2,7 @@
 //  CalendarEvent+CoreDataProperties.swift
 //  DuoDash
 //
-//  Created by Ben Siebert on 21.03.26.
+//  Created by Ben Siebert on 23.03.26.
 //
 //
 
@@ -18,12 +18,12 @@ extension CalendarEvent {
         return NSFetchRequest<CalendarEvent>(entityName: "CalendarEvent")
     }
 
-    @NSManaged public var id: UUID?
-    @NSManaged public var metadata: Data?
-    @NSManaged public var title: String?
-    @NSManaged public var startDate: Date?
     @NSManaged public var endDate: Date?
+    @NSManaged public var id: UUID?
     @NSManaged public var isAllDay: Bool
+    @NSManaged public var metadata: Data?
+    @NSManaged public var startDate: Date?
+    @NSManaged public var title: String?
     @NSManaged public var space: SharedSpace?
 
 }
