@@ -13,6 +13,8 @@ import UIKit
 class CoreDataManager: ObservableObject {
     // 1. Singleton-Instanz für einfachen Zugriff überall in der App
     static let shared = CoreDataManager()
+    @Published var lastSyncUpdate: Date = Date()
+    
     
     // 2. Der magische CloudKit Container
     let container: NSPersistentCloudKitContainer
@@ -50,6 +52,13 @@ class CoreDataManager: ObservableObject {
         // Dem Container beide Store-Beschreibungen zuweisen
         container.persistentStoreDescriptions = [privateStore, sharedStore]
         
+        privateStore.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        privateStore.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        
+        sharedStore.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        sharedStore.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        
+        
         // 5. Stores laden
         container.loadPersistentStores { (storeDescription, error) in
             
@@ -63,6 +72,42 @@ class CoreDataManager: ObservableObject {
         // 6. Magische Einstellungen, damit UI-Updates automatisch passieren, wenn neue Daten aus der Cloud kommen
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
+        NotificationCenter.default.addObserver(
+            forName: .NSPersistentStoreRemoteChange,
+            object: container.persistentStoreCoordinator,
+            queue: .main
+        ) { [weak self] _ in
+            print("☁️ Remote-Änderung erkannt. Warte auf Merge...")
+            
+            // Verzögerung: Gibt Core Data Zeit, die Daten in den viewContext zu mergen
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self?.container.viewContext.perform {
+                    self?.container.viewContext.refreshAllObjects()
+                    self?.lastSyncUpdate = Date()
+                    print("🔄 Force-Refresh nach Remote-Änderung ausgeführt.")
+                }
+            }
+        }
+        
+        // LISTENER 2: Feuert, wenn Objekte im viewContext TATSÄCHLICH geändert wurden
+        // Das ist der zuverlässigste Trigger, weil er erst kommt, wenn der Merge fertig ist
+        NotificationCenter.default.addObserver(
+            forName: .NSManagedObjectContextObjectsDidChange,
+            object: container.viewContext,
+            queue: .main
+        ) { [weak self] notification in
+            // Prüfe, ob es echte Änderungen gibt (nicht nur Faults)
+            let inserted = (notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>)?.count ?? 0
+            let updated = (notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>)?.count ?? 0
+            let deleted = (notification.userInfo?[NSDeletedObjectsKey] as? Set<NSManagedObject>)?.count ?? 0
+            
+            if inserted > 0 || updated > 0 || deleted > 0 {
+                print("✅ ViewContext hat sich geändert: +\(inserted) ~\(updated) -\(deleted)")
+                self?.lastSyncUpdate = Date()
+            }
+        }
+
     }
     
     func createSharedSpace(title: String, emoji: String) {
@@ -151,5 +196,24 @@ class CoreDataManager: ObservableObject {
         let userRecordId = try await ckContainer.userRecordID()
         
         return userRecordId.recordName
+    }
+    
+    func save() {
+        let context = container.viewContext
+        
+        guard context.hasChanges else { return }
+        
+        context.perform {
+            do {
+                try context.save()
+                print("💾 Gespeichert. CloudKit Sync wird angestoßen...")
+                
+                // Force-Refresh aller registrierten Objekte im Context
+                // Das stößt den internen Sync-Mechanismus nochmal an
+                context.refreshAllObjects()
+            } catch {
+                print("❌ Fehler beim Speichern: \(error.localizedDescription)")
+            }
+        }
     }
 }

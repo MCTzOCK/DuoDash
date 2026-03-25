@@ -90,7 +90,7 @@ struct OLD__CreateCountdownView: View {
                 space.countdowns?.adding(newCountdown)
                 
                 do {
-                    try viewContext.save()
+                    CoreDataManager.shared.save()
                 } catch {
                     print("Failed to create countdown \(error.localizedDescription)")
                 }

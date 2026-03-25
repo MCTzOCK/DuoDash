@@ -14,6 +14,7 @@ struct MemoryOverviewView: View {
     
     @ObservedObject var space: SharedSpace
     @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var coreData = CoreDataManager.shared
     
     @FetchRequest var memories: FetchedResults<Memory>
     
@@ -175,6 +176,11 @@ struct MemoryOverviewView: View {
         }
         .fullScreenCover(isPresented: $showingSwiper) {
             MemorySwiperView(memories: Array(memories))
+        }
+        .id(coreData.lastSyncUpdate)
+        .onChange(of: coreData.lastSyncUpdate) { _ in
+            // Zwingt ALLE FetchRequests in diesem View, ihre Daten neu zu laden
+            viewContext.refreshAllObjects()
         }
     }
 }

@@ -217,7 +217,7 @@ struct DateDetailView: View {
         // dateIdea.category = selectedCategory.rawValue
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Aktualisieren: \(error.localizedDescription)")
@@ -227,7 +227,7 @@ struct DateDetailView: View {
     private func deleteIdea() {
         viewContext.delete(dateIdea)
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Löschen: \(error.localizedDescription)")

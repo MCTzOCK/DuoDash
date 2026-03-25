@@ -138,7 +138,7 @@ struct CreateCountdownView: View {
         newCountdown.space = space
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Speichern des Countdowns: \(error.localizedDescription)")

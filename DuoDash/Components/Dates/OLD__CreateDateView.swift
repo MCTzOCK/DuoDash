@@ -135,7 +135,7 @@ struct OLD__CreateDateView: View {
                     space.addToDateIdeas(d)
                     
                     do {
-                        try viewContext.save()
+                        CoreDataManager.shared.save()
                     } catch {
                         
                     }

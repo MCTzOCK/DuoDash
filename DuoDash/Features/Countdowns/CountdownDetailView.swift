@@ -108,7 +108,7 @@ struct CountdownDetailView: View {
     
     func saveContext() {
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             viewContext.refresh(space, mergeChanges: true)
         } catch {
             print("Error saving context: \(error)")

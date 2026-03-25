@@ -144,7 +144,7 @@ struct CalendarEventDetailView: View {
         event.isAllDay = isAllDay
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Speichern: \(error.localizedDescription)")
@@ -154,7 +154,7 @@ struct CalendarEventDetailView: View {
     private func deleteEvent() {
         viewContext.delete(event)
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Löschen: \(error.localizedDescription)")

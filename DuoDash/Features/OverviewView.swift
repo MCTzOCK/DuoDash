@@ -16,6 +16,7 @@ struct OverviewView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \SharedSpace.joinDate, ascending: true)],
         animation: .default)
     private var spaces: FetchedResults<SharedSpace>
+    @ObservedObject var coreData = CoreDataManager.shared
     
     // State for creating a new space
     @State private var showCreateSheet = false
@@ -30,7 +31,7 @@ struct OverviewView: View {
     // State for deleting
     @State private var confirmDeleteVisible = false
     @State private var spaceToDelete: SharedSpace? = nil
-
+    
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
@@ -84,6 +85,10 @@ struct OverviewView: View {
         } message: { _ in
             Text("Dieser Vorgang kann nicht rückgängig gemacht werden.")
         }
+        .onChange(of: coreData.lastSyncUpdate) { _ in
+            // Zwingt ALLE FetchRequests in diesem View, ihre Daten neu zu laden
+            viewContext.refreshAllObjects()
+        }
     }
     
     // MARK: - Logic Helpers
@@ -94,7 +99,7 @@ struct OverviewView: View {
         renameJoinDate = space.joinDate ?? Date()
         renameSheetVisible = true
     }
-
+    
     private func saveRename() {
         guard let space = selectedSpace else { return }
         space.title = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -102,7 +107,7 @@ struct OverviewView: View {
         space.joinDate = renameJoinDate
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
         } catch {
             print("Fehler: \(error.localizedDescription)")
             viewContext.rollback()
@@ -113,7 +118,7 @@ struct OverviewView: View {
     
     private func performDelete(_ space: SharedSpace) {
         viewContext.delete(space)
-        try? viewContext.save()
+        CoreDataManager.shared.save()
         spaceToDelete = nil
     }
 }

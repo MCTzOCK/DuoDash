@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import CloudKit
+import Combine
 
 struct SpaceNavigationStack: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -67,6 +68,10 @@ struct SpaceNavigationStack: View {
                 CloudSharingView(share: share, container: container)
             }
         }
+        .onReceive(Timer.publish(every: 15, on: .main, in: .common).autoconnect()) { _ in
+            // Erzwingt einen frischen Fetch
+            CoreDataManager.shared.container.viewContext.refreshAllObjects()
+        }
     }
     
     private func showSettings() {
@@ -83,7 +88,7 @@ struct SpaceNavigationStack: View {
         space.joinDate = renameJoinDate
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
         } catch {
             print("Fehler: \(error.localizedDescription)")
             viewContext.rollback()

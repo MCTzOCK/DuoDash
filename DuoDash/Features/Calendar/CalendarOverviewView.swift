@@ -8,14 +8,11 @@
 import SwiftUI
 import CoreData
 
-// MARK: - ===========================================
-// MARK: - 1. KALENDER ÜBERSICHT (Hauptview)
-// MARK: - ===========================================
-
 struct CalendarOverviewView: View {
     
     @ObservedObject var space: SharedSpace
     @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var coreData = CoreDataManager.shared
     
     @FetchRequest var events: FetchedResults<CalendarEvent>
     
@@ -120,6 +117,11 @@ struct CalendarOverviewView: View {
         }
         .sheet(item: $eventToEdit) { event in
             CalendarEventDetailView(event: event, space: space)
+        }
+        .id(coreData.lastSyncUpdate)
+        .onChange(of: coreData.lastSyncUpdate) { _ in
+            // Zwingt ALLE FetchRequests in diesem View, ihre Daten neu zu laden
+            viewContext.refreshAllObjects()
         }
     }
     

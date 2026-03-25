@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import Combine
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -14,6 +15,7 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \SharedSpace.joinDate, ascending: true)],
         animation: .default)
     private var spaces: FetchedResults<SharedSpace>
+    @ObservedObject var coreData = CoreDataManager.shared
     
     var body: some View {
         NavigationStack {
@@ -23,6 +25,11 @@ struct ContentView: View {
                 OverviewView()
             }
         }
+        .onChange(of: coreData.lastSyncUpdate) { _ in
+            // Zwingt ALLE FetchRequests in diesem View, ihre Daten neu zu laden
+            viewContext.refreshAllObjects()
+        }
+
     }
 }
 

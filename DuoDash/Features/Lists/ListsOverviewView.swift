@@ -13,6 +13,7 @@ struct ListsOverviewView: View {
     
     @ObservedObject var space: SharedSpace
     @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var coreData = CoreDataManager.shared
     
     @FetchRequest var containers: FetchedResults<ListContainer>
     
@@ -54,7 +55,7 @@ struct ListsOverviewView: View {
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .padding()
-                                // Color.accentColor ist die sichere native Variante
+                            // Color.accentColor ist die sichere native Variante
                                 .background(Color.accentColor)
                                 .cornerRadius(12)
                         }
@@ -92,6 +93,11 @@ struct ListsOverviewView: View {
         }
         .sheet(isPresented: $showingCreateSheet) {
             CreateListView(space: space)
+        }
+        .id(coreData.lastSyncUpdate)
+        .onChange(of: coreData.lastSyncUpdate) { _ in
+            // Zwingt ALLE FetchRequests in diesem View, ihre Daten neu zu laden
+            viewContext.refreshAllObjects()
         }
     }
 }

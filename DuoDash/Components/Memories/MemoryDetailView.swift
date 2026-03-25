@@ -154,7 +154,7 @@ struct MemoryDetailView: View {
         }
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Speichern: \(error.localizedDescription)")
@@ -164,7 +164,7 @@ struct MemoryDetailView: View {
     private func deleteMemory() {
         viewContext.delete(memory)
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Löschen: \(error.localizedDescription)")

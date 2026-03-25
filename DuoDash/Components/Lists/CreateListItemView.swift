@@ -139,7 +139,7 @@ struct CreateListItemView: View {
         }
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Speichern: \(error.localizedDescription)")

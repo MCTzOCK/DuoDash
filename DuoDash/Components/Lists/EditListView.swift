@@ -146,7 +146,7 @@ struct EditListView: View {
         container.symbol = selectedSymbol
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
         } catch {
             print("Fehler beim Speichern: \(error.localizedDescription)")
@@ -162,7 +162,7 @@ struct EditListView: View {
             }
             
             do {
-                try viewContext.save()
+                CoreDataManager.shared.save()
             } catch {
                 print("Fehler beim Löschen: \(error.localizedDescription)")
             }
@@ -173,7 +173,7 @@ struct EditListView: View {
         viewContext.delete(container)
         
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
             dismiss()
             dismissRootView()
         } catch {

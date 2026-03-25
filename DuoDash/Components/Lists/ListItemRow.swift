@@ -20,7 +20,7 @@ struct ListItemRow: View {
             Button {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                     item.isCompleted.toggle()
-                    try? viewContext.save()
+                    CoreDataManager.shared.save()
                 }
             } label: {
                 Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")

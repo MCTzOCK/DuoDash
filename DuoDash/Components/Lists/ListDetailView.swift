@@ -14,6 +14,7 @@ struct ListDetailView: View {
     @ObservedObject var space: SharedSpace
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject var coreData = CoreDataManager.shared
     
     @FetchRequest var items: FetchedResults<ListItem>
     
@@ -169,6 +170,11 @@ struct ListDetailView: View {
         .sheet(isPresented: $showingEditSheet) {
             EditListView(container: container, space: space, dismissRootView: dismiss)
         }
+        .id(coreData.lastSyncUpdate)
+        .onChange(of: coreData.lastSyncUpdate) { _ in
+            // Zwingt ALLE FetchRequests in diesem View, ihre Daten neu zu laden
+            viewContext.refreshAllObjects()
+        }
     }
     
     // MARK: Quick-Add Funktion
@@ -183,7 +189,7 @@ struct ListDetailView: View {
             newItem.container = container
             
             do {
-                try viewContext.save()
+                CoreDataManager.shared.save()
                 quickAddTitle = ""
             } catch {
                 print("Fehler beim Speichern: \(error.localizedDescription)")
@@ -195,7 +201,7 @@ struct ListDetailView: View {
         withAnimation {
             viewContext.delete(item)
             do {
-                try viewContext.save()
+                CoreDataManager.shared.save()
             } catch {
                 print("Fehler beim Löschen: \(error.localizedDescription)")
             }

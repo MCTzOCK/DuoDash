@@ -192,7 +192,7 @@ struct DateCardView: View {
     
     private func saveContext() {
         do {
-            try viewContext.save()
+            CoreDataManager.shared.save()
         } catch {
             print("Fehler beim Speichern: \(error.localizedDescription)")
         }
