@@ -10,10 +10,6 @@ import SwiftUI
 import CoreData
 import PhotosUI
 
-// MARK: - ===========================================
-// MARK: - 1. MEMORY ÜBERSICHT (Hauptview)
-// MARK: - ===========================================
-
 struct MemoryOverviewView: View {
     
     @ObservedObject var space: SharedSpace
@@ -182,28 +178,3 @@ struct MemoryOverviewView: View {
         }
     }
 }
-
-// MARK: - ===========================================
-// MARK: - 2. MEMORY KARTE (Wiederverwendbar)
-// MARK: - ===========================================
-
-
-// MARK: - ===========================================
-// MARK: - 3. MEMORY ERSTELLEN (Sheet)
-// MARK: - ===========================================
-
-
-// MARK: - ===========================================
-// MARK: - 4. MEMORY BEARBEITEN (Sheet)
-// MARK: - ===========================================
-
-
-// MARK: - ===========================================
-// MARK: - 5. MEMORY SWIPER (Das Highlight-Feature!)
-// MARK: - ===========================================
-
-
-// MARK: - ===========================================
-// MARK: - 6. SWIPER KARTE (Die große, schöne Karte)
-// MARK: - ===========================================
-
