@@ -124,7 +124,7 @@ struct MemorySwiperView: View {
                         }
                     }
                     .padding(.bottom, 30)
-                    .zIndex(1) // Auch immer über der Karte
+                    .zIndex(1)
                 }
             }
         }

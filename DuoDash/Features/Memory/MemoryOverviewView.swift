@@ -91,7 +91,7 @@ struct MemoryOverviewView: View {
                                 .foregroundColor(Color(UIColor.tertiaryLabel))
                         }
                         .padding()
-                        .background(Color(UIColor.secondarySystemBackground))
+                        .background(Color(UIColor.secondarySystemFill))
                         .cornerRadius(20)
                     }
                     .buttonStyle(.plain)
