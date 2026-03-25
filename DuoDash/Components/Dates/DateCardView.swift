@@ -16,6 +16,8 @@ struct DateCardView: View {
     @ObservedObject var dateIdea: DateIdea
     @ObservedObject var space: SharedSpace
     
+    @State private var showAddToCalendar = false
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -133,7 +135,7 @@ struct DateCardView: View {
                         .frame(height: 20)
                     
                     Button(action: {
-                        
+                        showAddToCalendar = true
                     }) {
                         Image(systemName: "calendar.badge.plus")
                             .frame(maxWidth: .infinity)
@@ -147,10 +149,15 @@ struct DateCardView: View {
         }
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(20)
+        .clipped()
+        .contentShape(Rectangle())
         // Eleganter, weicher Schatten
         .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 6)
         .padding(.horizontal)
         .padding(.vertical, 8)
+        .sheet(isPresented: $showAddToCalendar) {
+            CreateCalendarEventView(space: space, dateIdea: dateIdea)
+        }
     }
     
     // MARK: - Hilfsfunktionen

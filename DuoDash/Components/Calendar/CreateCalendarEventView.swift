@@ -29,6 +29,16 @@ struct CreateCalendarEventView: View {
         _endDate = State(initialValue: initialDate.addingTimeInterval(3600))
     }
     
+    init(space: SharedSpace, dateIdea: DateIdea) {
+        self.space = space
+        _title = State(initialValue: dateIdea.title ?? "")
+        _text = State(initialValue: dateIdea.text ?? "")
+        _location = State(initialValue: dateIdea.location ?? "")
+        _url = State(initialValue: dateIdea.urlString ?? "")
+        _startDate = State(initialValue: Date())
+        _endDate = State(initialValue: Date().addingTimeInterval(3600))
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             
