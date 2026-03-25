@@ -64,7 +64,7 @@ struct UsView: View {
                 }
                 
                 // 3. BOTTOM CARD: Memories (Volle Breite)
-                NavigationLink(destination: Text("Memories View")) {
+                NavigationLink(destination: MemoryOverviewView(space: space)) {
                     HStack {
                         VStack(alignment: .leading, spacing: 8) {
                             Image(systemName: "photo.on.rectangle.angled")
