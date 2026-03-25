@@ -20,12 +20,11 @@ struct MemorySwiperView: View {
     
     var body: some View {
         ZStack {
-            // Hintergrund
             Color.black.ignoresSafeArea()
             
             VStack(spacing: 0) {
                 
-                // MARK: Header
+                // MARK: Header (mit .zIndex damit er IMMER oben bleibt)
                 HStack {
                     Button {
                         dismiss()
@@ -37,7 +36,6 @@ struct MemorySwiperView: View {
                     
                     Spacer()
                     
-                    // Fortschrittsanzeige
                     Text("\(currentIndex + 1) / \(shuffledMemories.count)")
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -45,7 +43,6 @@ struct MemorySwiperView: View {
                     
                     Spacer()
                     
-                    // Shuffle-Button
                     Button {
                         reshuffleMemories()
                     } label: {
@@ -55,14 +52,16 @@ struct MemorySwiperView: View {
                     }
                 }
                 .padding()
+                .zIndex(1) // Immer über der Karte
                 
                 Spacer()
                 
-                // MARK: Die Swipe-Karte
+                // MARK: Die Swipe-Karte (begrenzt auf die verfügbare Breite)
                 if !shuffledMemories.isEmpty {
                     let memory = shuffledMemories[currentIndex]
                     
                     SwiperCard(memory: memory)
+                        .frame(maxWidth: .infinity) // Begrenzt die Karte auf die Screen-Breite
                         .offset(x: dragOffset.width)
                         .rotationEffect(.degrees(Double(dragOffset.width) / 30))
                         .opacity(1.0 - abs(Double(dragOffset.width)) / 400)
@@ -73,20 +72,17 @@ struct MemorySwiperView: View {
                                 }
                                 .onEnded { gesture in
                                     if abs(gesture.translation.width) > 120 {
-                                        // Swipe war stark genug -> nächste Karte
                                         withAnimation(.easeOut(duration: 0.3)) {
                                             dragOffset = CGSize(
                                                 width: gesture.translation.width > 0 ? 500 : -500,
                                                 height: 0
                                             )
                                         }
-                                        
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                             goToNext()
                                             dragOffset = .zero
                                         }
                                     } else {
-                                        // Zurückschnappen
                                         withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                                             dragOffset = .zero
                                         }
@@ -94,7 +90,6 @@ struct MemorySwiperView: View {
                                 }
                         )
                         .animation(.spring(response: 0.4, dampingFraction: 0.7), value: dragOffset)
-                    
                 } else {
                     Text("Keine Erinnerungen vorhanden")
                         .foregroundColor(.white.opacity(0.5))
@@ -102,10 +97,9 @@ struct MemorySwiperView: View {
                 
                 Spacer()
                 
-                // MARK: Navigations-Buttons unten
+                // MARK: Navigations-Buttons
                 if !shuffledMemories.isEmpty {
                     HStack(spacing: 40) {
-                        // Zurück
                         Button {
                             goToPrevious()
                         } label: {
@@ -115,7 +109,6 @@ struct MemorySwiperView: View {
                         }
                         .disabled(currentIndex == 0)
                         
-                        // Weiter
                         Button {
                             withAnimation(.easeOut(duration: 0.3)) {
                                 dragOffset = CGSize(width: -500, height: 0)
@@ -131,6 +124,7 @@ struct MemorySwiperView: View {
                         }
                     }
                     .padding(.bottom, 30)
+                    .zIndex(1) // Auch immer über der Karte
                 }
             }
         }

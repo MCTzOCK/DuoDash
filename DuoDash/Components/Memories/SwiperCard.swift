@@ -18,14 +18,15 @@ struct SwiperCard: View {
             // Foto oder Platzhalter
             ZStack(alignment: .bottomLeading) {
                 if let photoData = memory.photoData, let uiImage = UIImage(data: photoData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 320)
-                        .frame(maxWidth: .infinity)
-                        .clipped()
+                    GeometryReader { geo in
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: geo.size.width, height: 320)
+                            .clipped()
+                    }
+                    .frame(height: 320)
                 } else {
-                    // Gradient-Platzhalter
                     LinearGradient(
                         colors: [.accentColor.opacity(0.6), .purple.opacity(0.4)],
                         startPoint: .topLeading,
@@ -39,7 +40,6 @@ struct SwiperCard: View {
                     )
                 }
                 
-                // Datum-Overlay über dem Foto
                 if let date = memory.date {
                     Text(formattedDate(date))
                         .font(.caption)
@@ -52,6 +52,15 @@ struct SwiperCard: View {
                         .padding(16)
                 }
             }
+            // Diese Zeile ist entscheidend: Schneidet alles ab, was über die Karte hinausragt
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 24,
+                    bottomLeadingRadius: 0,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: 24
+                )
+            )
             
             // Text-Bereich
             VStack(alignment: .leading, spacing: 12) {
