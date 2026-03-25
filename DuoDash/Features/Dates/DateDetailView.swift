@@ -45,7 +45,7 @@ struct DateDetailView: View {
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 120, height: 120)
-                                .clipShape(Circle())
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                 .overlay(Circle().stroke(Color.secondary.opacity(0.2), lineWidth: 1))
                                 .shadow(radius: 5)
                         } else {
@@ -59,7 +59,7 @@ struct DateDetailView: View {
                             }
                             .frame(width: 120, height: 120)
                             .background(Color(UIColor.secondarySystemFill))
-                            .clipShape(Circle())
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                         }
                     }
                     Spacer()

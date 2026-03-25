@@ -63,27 +63,28 @@ struct DateOverviewView: View {
             }
         }
     }
-
+    
     
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Picker("Kategorie", selection: $selectedCategory) {
-                    Text("Alle").tag(DateCategory.all)
-                    Text("Romantisch").tag(DateCategory.romantic)
-                    Text("Abenteuer").tag(DateCategory.adventurous)
-                    Text("Entspannt").tag(DateCategory.relaxed)
+        VStack(spacing: 20) {
+            Picker("Kategorie", selection: $selectedCategory) {
+                ForEach(DateCategory.allCases, id: \.self) { category in
+                    Text(category.rawValue)
+                        .tag(category)
                 }
-                .pickerStyle(.segmented)
-                .onChange(of: selectedCategory) { _ in
-                    searchText = ""
-                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+            .id("categoryPicker")
+            .onChange(of: selectedCategory) { _ in
+                searchText = ""
+            }
+            ScrollView {
                 
                 ForEach(filteredAndSortedDates) { dateIdea in
                     DateCardView(dateIdea: dateIdea, space: space)
                 }
-                .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Date-Ideen durchsuchen")
                 
                 if space.dateIdeas?.allObjects.count == 0 {
                     DateUnavailableView(showCreateSheet: $showCreateSheet)
@@ -117,6 +118,7 @@ struct DateOverviewView: View {
         .sheet(isPresented: $showCreateSheet) {
             CreateDateView(space: space)
         }
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Date-Ideen durchsuchen")
     }
 }
 

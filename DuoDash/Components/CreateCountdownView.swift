@@ -4,11 +4,9 @@
 //
 //  Created by Ben Siebert on 24.03.26.
 //
-
 import SwiftUI
 import CoreData
 import PhotosUI
-
 
 struct CreateCountdownView: View {
     
@@ -16,122 +14,136 @@ struct CreateCountdownView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @State private var title: String = ""
-    @State private var targetData: Date = Date()
+    @State private var targetDate: Date = Date()
     @State private var imageData: Data? = nil
     @State private var selectedPhoto: PhotosPickerItem? = nil
+    
     @ObservedObject var space: SharedSpace
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             
-            Spacer()
-            
-            Image(systemName: "hourglass.badge.plus")
-                .font(.system(size: 80))
-                .foregroundColor(.accentColor)
-            
-            Text("Neuer Countdown")
-                .font(.largeTitle)
-                .bold()
-                .multilineTextAlignment(.center)
-            
-            Text("Erstelle einen neuen Countdown, damit ihr euch gemeinsam auf ein besonderes Ereignis freuen könnt.")
-                .font(.body)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 30)
-            
-            Spacer()
-            
-            PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                if imageData == nil {
-                    Image(systemName: "photo.on.rectangle")
-                        .font(.system(size: 40))
-                        .foregroundColor(.accentColor)
-                        .frame(width: 80, height: 80)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                } else {
-                    Image(uiImage: UIImage(data: imageData!)!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 80, height: 80)
-                        .clipped()
-                        .cornerRadius(8)
-                }
-            }
-            
-            Spacer()
-            
-            TextField("Titel", text: $title)
-                .padding(16)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(8)
-            
-            DatePicker("Datum & Uhrzeit", selection: $targetData, in: Date()..., displayedComponents: [.date, .hourAndMinute])
-                .padding(16)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(8)
-                .padding(.top, 10)
-                
-            
-            
-            Button {
-                
-                let newCountdown = Countdown(context: viewContext)
-                newCountdown.title = title
-                newCountdown.targetDate = targetData
-                if let imageData = imageData {
-                    newCountdown.imageData = imageData
-                }
-                newCountdown.id = UUID()
-                newCountdown.space = space
-                
-                space.countdowns?.adding(newCountdown)
-                
-                do {
-                    try viewContext.save()
-                } catch {
-                    print("Failed to create countdown \(error.localizedDescription)")
-                }
-                
-                dismiss()
-            } label: {
-                Text("Neuen Countdown erstellen")
-                    .font(.headline)
-                    .foregroundColor(.white)
+            Form {
+                // MARK: - 1. Foto Sektion (Header)
+                Section {
+                    HStack {
+                        Spacer()
+                        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                            if let imageData = imageData, let uiImage = UIImage(data: imageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 120, height: 120)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.secondary.opacity(0.2), lineWidth: 1))
+                                    .shadow(radius: 5)
+                            } else {
+                                VStack(spacing: 8) {
+                                    // Passendes Icon für Countdowns
+                                    Image(systemName: "hourglass.badge.plus")
+                                        .font(.system(size: 50))
+                                        .foregroundColor(.accentColor)
+                                    Text("Foto hinzufügen")
+                                        .font(.caption)
+                                        .bold()
+                                }
+                                .frame(width: 120, height: 120)
+                                .background(Color(UIColor.secondarySystemFill))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                            }
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, 10)
+                    
+                    VStack {
+                        Text("Neuer Countdown")
+                            .font(.largeTitle)
+                            .bold()
+                            .multilineTextAlignment(.center)
+                        
+                        Text("Erstelle einen neuen Countdown, damit ihr euch gemeinsam auf ein besonderes Ereignis freuen könnt.")
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 30)
+                    }
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(title.isEmpty ? Color.accent.opacity(0.5) : Color.accent)
-                    .cornerRadius(12)
+                }
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden, edges: .all)
+                
+                // MARK: - 2. Details (Eingabefelder)
+                Section(header: Text("Details")) {
+                    TextField("Titel", text: $title)
+                        .font(.headline)
+                    
+                    DatePicker("Datum & Uhrzeit",
+                               selection: $targetDate,
+                               in: Date()...,
+                               displayedComponents: [.date, .hourAndMinute])
+                }
             }
-            .disabled(title.isEmpty)
-            .padding(.horizontal, 40)
-            .padding(.top, 40)
             
-            Button {
-                dismiss()
-            } label: {
-                Text("Abbrechen")
-                    .foregroundStyle(.gray)
-                    .bold()
+            // MARK: - 3. Buttons am unteren Rand
+            VStack(spacing: 16) {
+                Button {
+                    saveNewCountdown()
+                } label: {
+                    Text("Neuen Countdown erstellen")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        // Color.accentColor ist die sichere native Variante
+                        .background(title.isEmpty ? Color.accentColor.opacity(0.5) : Color.accentColor)
+                        .cornerRadius(12)
+                }
+                .disabled(title.isEmpty)
+                
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Abbrechen")
+                        .foregroundStyle(.gray)
+                        .bold()
+                }
             }
             .padding(.horizontal, 40)
             .padding(.top, 10)
-            Spacer()
+            .padding(.bottom, 20)
+            .background(Color(UIColor.systemGroupedBackground))
         }
-        .padding()
-        .onChange(of: selectedPhoto) {
+        // Foto verarbeiten
+        .onChange(of: selectedPhoto) { newValue in
             Task {
-                if let loaded = try? await selectedPhoto?.loadTransferable(type: Image.self) {
-                    imageData = try? await loaded.exported(as: .png)
-                } else {
-                    
+                if let data = try? await newValue?.loadTransferable(type: Data.self) {
+                    imageData = data
                 }
             }
         }
     }
     
+    // MARK: - Speicher-Logik
+    private func saveNewCountdown() {
+        let newCountdown = Countdown(context: viewContext)
+        newCountdown.id = UUID()
+        newCountdown.title = title
+        newCountdown.targetDate = targetDate
+        
+        if let imgData = imageData {
+            newCountdown.imageData = imgData
+        }
+        
+        newCountdown.space = space
+        
+        do {
+            try viewContext.save()
+            dismiss()
+        } catch {
+            print("Fehler beim Speichern des Countdowns: \(error.localizedDescription)")
+        }
+    }
 }
 
 #Preview {
