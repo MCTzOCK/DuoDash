@@ -18,6 +18,7 @@
         <relationship name="space" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SharedSpace" inverseName="countdowns" inverseEntity="SharedSpace"/>
     </entity>
     <entity name="DateIdea" representedClassName="DateIdea" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="imageData" optional="YES" attributeType="Binary"/>
         <attribute name="isDone" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>

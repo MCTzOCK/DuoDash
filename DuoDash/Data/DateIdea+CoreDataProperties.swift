@@ -2,7 +2,7 @@
 //  DateIdea+CoreDataProperties.swift
 //  
 //
-//  Created by Ben Siebert on 24.03.26.
+//  Created by Ben Siebert on 25.03.26.
 //
 //
 
@@ -27,10 +27,11 @@ extension DateIdea {
     @NSManaged public var text: String?
     @NSManaged public var title: String?
     @NSManaged public var urlString: String?
+    @NSManaged public var category: String?
     @NSManaged public var space: SharedSpace?
 
 }
 
-extension DateIdea : Identifiable {
-
+extension DateIdea: Identifiable {
+    
 }
