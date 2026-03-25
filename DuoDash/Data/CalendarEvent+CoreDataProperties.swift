@@ -1,8 +1,8 @@
 //
 //  CalendarEvent+CoreDataProperties.swift
-//  DuoDash
+//  
 //
-//  Created by Ben Siebert on 23.03.26.
+//  Created by Ben Siebert on 25.03.26.
 //
 //
 
@@ -24,10 +24,12 @@ extension CalendarEvent {
     @NSManaged public var metadata: Data?
     @NSManaged public var startDate: Date?
     @NSManaged public var title: String?
+    @NSManaged public var location: String?
+    @NSManaged public var url: String?
+    @NSManaged public var text: String?
     @NSManaged public var space: SharedSpace?
 
 }
 
 extension CalendarEvent : Identifiable {
-
 }

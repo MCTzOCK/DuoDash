@@ -4,9 +4,12 @@
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isAllDay" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="metadata" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
         <relationship name="space" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SharedSpace" inverseName="calendarEvents" inverseEntity="SharedSpace"/>
     </entity>
     <entity name="Countdown" representedClassName="Countdown" syncable="YES">

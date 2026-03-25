@@ -38,7 +38,7 @@ struct SpaceNavigationStack: View {
                 Label("Wir", systemImage: "heart.fill")
             }
             Tab {
-                
+                OrganisationTabView(space: space)
             } label: {
                 Label("Organisation", systemImage: "checklist")
             }
