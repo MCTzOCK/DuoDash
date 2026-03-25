@@ -43,8 +43,10 @@
     </entity>
     <entity name="ListItem" representedClassName="ListItem" syncable="YES">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
         <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="metadata" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="container" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ListContainer" inverseName="items" inverseEntity="ListContainer"/>
     </entity>

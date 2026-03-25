@@ -116,16 +116,6 @@ struct OrganisationCard: View {
     }
 }
 
-// MARK: - Dummy Ziel-Views (Damit der Code direkt läuft)
-
-struct ListsOverviewView: View {
-    @ObservedObject var space: SharedSpace
-    var body: some View {
-        Text("Hier kommen die Listen hin!")
-            .navigationTitle("Listen")
-    }
-}
-
 // MARK: - Preview
 #Preview {
     OrganisationTabView(space: SharedSpace())

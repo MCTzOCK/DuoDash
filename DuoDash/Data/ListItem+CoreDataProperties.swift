@@ -1,8 +1,8 @@
 //
 //  ListItem+CoreDataProperties.swift
-//  DuoDash
+//  
 //
-//  Created by Ben Siebert on 23.03.26.
+//  Created by Ben Siebert on 25.03.26.
 //
 //
 
@@ -22,10 +22,12 @@ extension ListItem {
     @NSManaged public var isCompleted: Bool
     @NSManaged public var metadata: Data?
     @NSManaged public var title: String?
+    @NSManaged public var text: String?
+    @NSManaged public var imageData: Data?
     @NSManaged public var container: ListContainer?
 
 }
 
 extension ListItem : Identifiable {
-
+    
 }
