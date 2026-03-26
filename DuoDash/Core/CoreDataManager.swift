@@ -9,6 +9,7 @@ import CoreData
 import CloudKit
 import Combine
 import UIKit
+import WidgetKit
 
 class CoreDataManager: ObservableObject {
     // 1. Singleton-Instanz für einfachen Zugriff überall in der App
@@ -105,9 +106,10 @@ class CoreDataManager: ObservableObject {
             if inserted > 0 || updated > 0 || deleted > 0 {
                 print("✅ ViewContext hat sich geändert: +\(inserted) ~\(updated) -\(deleted)")
                 self?.lastSyncUpdate = Date()
+                self?.syncDataToWidget()
             }
         }
-
+        
     }
     
     func createSharedSpace(title: String, emoji: String) {
@@ -215,5 +217,58 @@ class CoreDataManager: ObservableObject {
                 print("❌ Fehler beim Speichern: \(error.localizedDescription)")
             }
         }
+    }
+    
+    func fetchAndStoreCurrentUserID() {
+        CKContainer(identifier: "iCloud.com.bensiebert.DuoDash").fetchUserRecordID { recordID, error in
+            if let recordID = recordID {
+                let userID = recordID.recordName
+                SharedDefaults.saveMyUserID(userID)
+                print("👤 Eigene CloudKit ID gespeichert: \(userID)")
+            } else if let error = error {
+                print("❌ Konnte User-ID nicht abrufen: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func syncDataToWidget() {
+        let context = container.viewContext
+        
+        // 1. Alle Spaces holen und in SharedDefaults speichern
+        let spaceRequest: NSFetchRequest<SharedSpace> = SharedSpace.fetchRequest()
+        guard let spaces = try? context.fetch(spaceRequest) else { return }
+        
+        let spaceInfos = spaces.compactMap { space -> SpaceInfo? in
+            guard let id = space.id?.uuidString else { return nil }
+            return SpaceInfo(id: id, title: space.title ?? "Space")
+        }
+        SharedDefaults.saveAvailableSpaces(spaceInfos)
+        
+        // 2. Für jeden Space die neuesten Partner-Notes speichern
+        let myID = SharedDefaults.myUserID
+        
+        for space in spaces {
+            guard let spaceID = space.id?.uuidString else { continue }
+            
+            let noteRequest: NSFetchRequest<LoveNote> = LoveNote.fetchRequest()
+            noteRequest.predicate = NSPredicate(format: "space == %@ AND authorId != %@", space, myID)
+            noteRequest.sortDescriptors = [NSSortDescriptor(keyPath: \LoveNote.createdAt, ascending: false)]
+            noteRequest.fetchLimit = 5 // Die letzten 5 reichen
+            
+            if let notes = try? context.fetch(noteRequest) {
+                let noteInfos = notes.map { note in
+                    NoteInfo(
+                        message: note.message ?? "",
+                        date: note.createdAt ?? Date(),
+                        authorID: note.authorId ?? ""
+                    )
+                }
+                SharedDefaults.saveNotes(noteInfos, forSpaceID: spaceID)
+            }
+        }
+        
+        // 3. Widget aktualisieren
+        WidgetCenter.shared.reloadAllTimelines()
+        print("📲 Widget-Daten synchronisiert.")
     }
 }

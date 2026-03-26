@@ -24,6 +24,13 @@ struct DuoDashApp: App {
             ContentView()
             // Hier injizieren wir den viewContext in die SwiftUI-Umgebung
                 .environment(\.managedObjectContext, coreDataManager.container.viewContext)
+                .onAppear {
+                    coreDataManager.fetchAndStoreCurrentUserID()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        coreDataManager.syncDataToWidget()
+                    }
+                }
         }
     }
 }

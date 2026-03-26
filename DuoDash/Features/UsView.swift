@@ -15,7 +15,7 @@ struct UsView: View {
         ScrollView {
             VStack(spacing: 20) {
                 
-                NavigationLink(destination: Text("Love Notes View")) {
+                NavigationLink(destination: LoveNotesOverviewView(space: space)) {
                     HStack {
                         VStack(alignment: .leading, spacing: 8) {
                             Image(systemName: "heart.text.square.fill")

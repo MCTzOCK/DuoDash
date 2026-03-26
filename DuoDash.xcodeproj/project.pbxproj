@@ -8,10 +8,41 @@
 
 /* Begin PBXBuildFile section */
 		B551DD7C2F71C4FA0020C6AC /* SwiftEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = B551DD7B2F71C4FA0020C6AC /* SwiftEmojiPicker */; };
+		B5F2978B2F75A74D00F896DC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5F2978A2F75A74D00F896DC /* WidgetKit.framework */; };
+		B5F2978D2F75A74D00F896DC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5F2978C2F75A74D00F896DC /* SwiftUI.framework */; };
+		B5F2979A2F75A74E00F896DC /* DuoDashWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B5F297882F75A74D00F896DC /* DuoDashWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B5F297982F75A74E00F896DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B59073F12F6EE961006CD205 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5F297872F75A74D00F896DC;
+			remoteInfo = DuoDashWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B5F2979B2F75A74E00F896DC /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B5F2979A2F75A74E00F896DC /* DuoDashWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B59073F92F6EE961006CD205 /* DuoDash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DuoDash.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5F297882F75A74D00F896DC /* DuoDashWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DuoDashWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5F2978A2F75A74D00F896DC /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		B5F2978C2F75A74D00F896DC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		B5F297A02F75A75A00F896DC /* DuoDashWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DuoDashWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -22,6 +53,21 @@
 			);
 			target = B59073F82F6EE961006CD205 /* DuoDash */;
 		};
+		B5F2979F2F75A74E00F896DC /* Exceptions for "DuoDashWidget" folder in "DuoDashWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B5F297872F75A74D00F896DC /* DuoDashWidgetExtension */;
+		};
+		B5F297A42F75A78700F896DC /* Exceptions for "DuoDash" folder in "DuoDashWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SharedDefaults.swift,
+				WidgetIntents.swift,
+			);
+			target = B5F297872F75A74D00F896DC /* DuoDashWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -29,8 +75,17 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				B59074092F6EE962006CD205 /* Exceptions for "DuoDash" folder in "DuoDash" target */,
+				B5F297A42F75A78700F896DC /* Exceptions for "DuoDash" folder in "DuoDashWidgetExtension" target */,
 			);
 			path = DuoDash;
+			sourceTree = "<group>";
+		};
+		B5F2978E2F75A74D00F896DC /* DuoDashWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B5F2979F2F75A74E00F896DC /* Exceptions for "DuoDashWidget" folder in "DuoDashWidgetExtension" target */,
+			);
+			path = DuoDashWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -44,13 +99,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B5F297852F75A74D00F896DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5F2978D2F75A74D00F896DC /* SwiftUI.framework in Frameworks */,
+				B5F2978B2F75A74D00F896DC /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		B59073F02F6EE961006CD205 = {
 			isa = PBXGroup;
 			children = (
+				B5F297A02F75A75A00F896DC /* DuoDashWidgetExtension.entitlements */,
 				B59073FB2F6EE961006CD205 /* DuoDash */,
+				B5F2978E2F75A74D00F896DC /* DuoDashWidget */,
+				B5F297892F75A74D00F896DC /* Frameworks */,
 				B59073FA2F6EE961006CD205 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,8 +126,18 @@
 			isa = PBXGroup;
 			children = (
 				B59073F92F6EE961006CD205 /* DuoDash.app */,
+				B5F297882F75A74D00F896DC /* DuoDashWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B5F297892F75A74D00F896DC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B5F2978A2F75A74D00F896DC /* WidgetKit.framework */,
+				B5F2978C2F75A74D00F896DC /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -73,10 +150,12 @@
 				B59073F52F6EE961006CD205 /* Sources */,
 				B59073F62F6EE961006CD205 /* Frameworks */,
 				B59073F72F6EE961006CD205 /* Resources */,
+				B5F2979B2F75A74E00F896DC /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B5F297992F75A74E00F896DC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				B59073FB2F6EE961006CD205 /* DuoDash */,
@@ -89,6 +168,28 @@
 			productReference = B59073F92F6EE961006CD205 /* DuoDash.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B5F297872F75A74D00F896DC /* DuoDashWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5F2979E2F75A74E00F896DC /* Build configuration list for PBXNativeTarget "DuoDashWidgetExtension" */;
+			buildPhases = (
+				B5F297842F75A74D00F896DC /* Sources */,
+				B5F297852F75A74D00F896DC /* Frameworks */,
+				B5F297862F75A74D00F896DC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B5F2978E2F75A74D00F896DC /* DuoDashWidget */,
+			);
+			name = DuoDashWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = DuoDashWidgetExtension;
+			productReference = B5F297882F75A74D00F896DC /* DuoDashWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -100,6 +201,9 @@
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					B59073F82F6EE961006CD205 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					B5F297872F75A74D00F896DC = {
 						CreatedOnToolsVersion = 26.2;
 					};
 				};
@@ -122,12 +226,20 @@
 			projectRoot = "";
 			targets = (
 				B59073F82F6EE961006CD205 /* DuoDash */,
+				B5F297872F75A74D00F896DC /* DuoDashWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B59073F72F6EE961006CD205 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5F297862F75A74D00F896DC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -144,7 +256,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B5F297842F75A74D00F896DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B5F297992F75A74E00F896DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B5F297872F75A74D00F896DC /* DuoDashWidgetExtension */;
+			targetProxy = B5F297982F75A74E00F896DC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B590740B2F6EE962006CD205 /* Debug */ = {
@@ -346,6 +473,68 @@
 			};
 			name = Release;
 		};
+		B5F2979C2F75A74E00F896DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DuoDashWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U5XU7Z3LFF;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DuoDashWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DuoDashWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bensiebert.DuoDash.DuoDashWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B5F2979D2F75A74E00F896DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DuoDashWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U5XU7Z3LFF;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DuoDashWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DuoDashWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bensiebert.DuoDash.DuoDashWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -363,6 +552,15 @@
 			buildConfigurations = (
 				B590740B2F6EE962006CD205 /* Debug */,
 				B590740C2F6EE962006CD205 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5F2979E2F75A74E00F896DC /* Build configuration list for PBXNativeTarget "DuoDashWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5F2979C2F75A74E00F896DC /* Debug */,
+				B5F2979D2F75A74E00F896DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
