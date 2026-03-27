@@ -146,7 +146,7 @@ class CoreDataManager: ObservableObject {
                 if let share = share {
                     print("✅ Share-Objekt im Speicher erstellt. Titel wird gesetzt...")
                     share[CKShare.SystemFieldKey.title] = "DuoDash Bereich" as CKRecordValue?
-                    share[CKShare.SystemFieldKey.thumbnailImageData] = UIImage(systemName: "person.2.fill")?.jpegData(compressionQuality: 1) as CKRecordValue?
+                    share[CKShare.SystemFieldKey.thumbnailImageData] = UIImage(named: "Logo")?.jpegData(compressionQuality: 1) as CKRecordValue?
                     share[CKShare.SystemFieldKey.shareType] = "com.bensiebert.duodash.sharedspace" as CKRecordValue?
                     //share.publicPermission = .readWrite
                     
