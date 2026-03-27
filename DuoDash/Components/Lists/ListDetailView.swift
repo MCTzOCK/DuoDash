@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import CoreData
+import FoundationModels
 
 
 struct ListDetailView: View {
@@ -21,6 +22,8 @@ struct ListDetailView: View {
     @State private var showingCreateSheet = false
     @State private var itemToEdit: ListItem? = nil
     @State private var showingEditSheet = false
+    
+    @State private var showingSpinnerSheet = false
     
     // Quick-Add direkt im View
     @State private var quickAddTitle: String = ""
@@ -153,6 +156,13 @@ struct ListDetailView: View {
                     Image(systemName: "plus")
                 }
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showingSpinnerSheet = true
+                } label: {
+                    Image(systemName: "dice")
+                }
+            }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     showingEditSheet = true
@@ -170,7 +180,22 @@ struct ListDetailView: View {
         .sheet(isPresented: $showingEditSheet) {
             EditListView(container: container, space: space, dismissRootView: dismiss)
         }
-        .id(coreData.lastSyncUpdate)
+        .sheet(isPresented: $showingSpinnerSheet) {
+            NavigationStack {
+                FortuneWheelView(
+                    items: items.map { $0.title ?? "Unbenannter Eintrag" },
+                    onResult: { result in
+                    }
+                )
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Fertig") {
+                            showingSpinnerSheet = false
+                        }
+                    }
+                }
+            }
+        }
         .onChange(of: coreData.lastSyncUpdate) { _ in
             // Zwingt ALLE FetchRequests in diesem View, ihre Daten neu zu laden
             viewContext.refreshAllObjects()
