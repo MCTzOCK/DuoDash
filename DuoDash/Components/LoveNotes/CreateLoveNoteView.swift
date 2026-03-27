@@ -7,12 +7,14 @@
 import SwiftUI
 import CoreData
 import WidgetKit
+import StoreKit
 
 struct CreateLoveNoteView: View {
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    
+    @Environment(\.requestReview) var requestReview
+
     @State private var message: String = ""
     @ObservedObject var space: SharedSpace
     
@@ -138,6 +140,10 @@ struct CreateLoveNoteView: View {
             WidgetCenter.shared.reloadAllTimelines()
             
             dismiss()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                requestReview()
+            }
         } catch {
             print("Fehler beim Speichern: \(error.localizedDescription)")
         }

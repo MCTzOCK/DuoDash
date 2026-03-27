@@ -10,6 +10,29 @@ import CoreData
 import CloudKit
 import Combine
 
+
+fileprivate let MIT_LICENSE = """
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+    """
+
+
+
 struct SpaceNavigationStack: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject public var space: SharedSpace
@@ -44,9 +67,18 @@ struct SpaceNavigationStack: View {
                 Label("Organisation", systemImage: "checklist")
             }
             Tab {
-                SpaceMoreView(space: space, openSettings: showSettings)
+                UAUICommonInfoView(title: "DuoDash", logoName: "Logo", version: "1.0", libraries: [
+                    OpenSourceLibrary(name: "SwiftEmojiPicker", copyright: "Copyright (c) 2026 Sergey Likhanov", licenseText: MIT_LICENSE)
+                ], content: {
+                    Section("Trinkgeld") {
+                        NavigationLink(destination: TipJarView()) {
+                            SettingsInfoRow(icon: "cup.and.heat.waves.fill", color: .accent, title: "Trinkgeld", value: "no-disclosure")
+                        }
+                        .buttonStyle(.plain)
+                    }
+                })
             } label: {
-                Label("Mehr", systemImage: "ellipsis")
+                Label("Mehr", systemImage: "ellipsis.circle")
             }
         }
         .navigationTitle(space.title ?? "DuoDash")

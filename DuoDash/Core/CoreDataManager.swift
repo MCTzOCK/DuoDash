@@ -240,7 +240,7 @@ class CoreDataManager: ObservableObject {
         
         let spaceInfos = spaces.compactMap { space -> SpaceInfo? in
             guard let id = space.id?.uuidString else { return nil }
-            return SpaceInfo(id: id, title: space.title ?? "Space")
+            return SpaceInfo(id: id, title: space.title ?? "Space", joinDate: space.joinDate ?? Date())
         }
         SharedDefaults.saveAvailableSpaces(spaceInfos)
         

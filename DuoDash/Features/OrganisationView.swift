@@ -11,61 +11,81 @@ import CoreData
 struct OrganisationTabView: View {
     
     @ObservedObject var space: SharedSpace
+    @State private var currentUserID: String = ""
+
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
+        ScrollView {
+            VStack(spacing: 24) {
+                
+                // MARK: - Header Bereich
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Gemeinsame Planung")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
                     
-                    // MARK: - Header Bereich
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Gemeinsame Planung")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                        
-                        Text("Behaltet eure Termine, Einkäufe und To-Do's an einem zentralen Ort im Blick.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-                    
-                    // MARK: - Navigation Cards
-                    VStack(spacing: 16) {
-                        
-                        // 1. Die Listen Karte
-                        NavigationLink(destination: ListsOverviewView(space: space)) {
-                            OrganisationCard(
-                                title: "Geteilte Listen",
-                                subtitle: "Einkäufe, To-Do's, Packlisten und mehr. Hake Dinge ab und dein Partner sieht es in Echtzeit.",
-                                icon: "checklist",
-                                iconColor: .blue
-                            )
-                        }
-                        .buttonStyle(.plain) // Wichtig, damit nicht die ganze Karte blau wird!
-                        
-                        // 2. Die Kalender Karte
-                        NavigationLink(destination: CalendarOverviewView(space: space)) {
-                            OrganisationCard(
-                                title: "Pärchen-Kalender",
-                                subtitle: "Wann ist das nächste Date? Wer kocht am Dienstag? Tragt alle gemeinsamen Termine hier ein.",
-                                icon: "calendar",
-                                iconColor: .red
-                            )
-                        }
-                        .buttonStyle(.plain)
-                        
-                    }
-                    .padding(.horizontal)
-                    
-                    Spacer()
+                    Text("Behaltet eure Termine, Einkäufe und To-Do's an einem zentralen Ort im Blick.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .padding(.top, 10)
+                
+                // MARK: - Navigation Cards
+                VStack(spacing: 16) {
+                    
+                    // 1. Die Listen Karte
+                    NavigationLink(destination: ListsOverviewView(space: space)) {
+                        OrganisationCard(
+                            title: "Geteilte Listen",
+                            subtitle: "Einkäufe, To-Do's, Packlisten und mehr. Hake Dinge ab und dein Partner sieht es in Echtzeit.",
+                            icon: "checklist",
+                            iconColor: .blue
+                        )
+                    }
+                    .buttonStyle(.plain) // Wichtig, damit nicht die ganze Karte blau wird!
+                    
+                    // 2. Die Kalender Karte
+                    NavigationLink(destination: CalendarOverviewView(space: space)) {
+                        OrganisationCard(
+                            title: "Pärchen-Kalender",
+                            subtitle: "Wann ist das nächste Date? Wer kocht am Dienstag? Tragt alle gemeinsamen Termine hier ein.",
+                            icon: "calendar",
+                            iconColor: .red
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    
+                    NavigationLink {
+                        PartnerWikiView(userID: currentUserID)
+                            .needsFaceID()
+                    } label: {
+                        OrganisationCard(
+                            title: "Partner-Wiki",
+                            subtitle: "Dein privater Notizbereich über deinen Partner",
+                            icon: "lock.doc.fill",
+                            iconColor: .indigo
+                        )
+                    }
+                    
+                }
+                .padding(.horizontal)
+                
+                Spacer()
             }
-            .navigationTitle("Organisation")
-            // Ein leicht abgesetzter Hintergrund, auf dem die weißen Karten perfekt wirken
-            .background(Color(UIColor.systemGroupedBackground))
+        }
+        .navigationTitle("Organisation")
+        // Ein leicht abgesetzter Hintergrund, auf dem die weißen Karten perfekt wirken
+        .background(Color(UIColor.systemGroupedBackground))
+        .task {
+            do {
+                currentUserID = try await CoreDataManager.shared.getCurrentUserId()
+                currentUserID = currentUserID + "_" + space.id!.uuidString
+            } catch {
+                print("Fehler beim Laden der User-ID")
+            }
         }
     }
 }

@@ -15,6 +15,19 @@ struct UsView: View {
         ScrollView {
             VStack(spacing: 20) {
                 
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Unsere Beziehung")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                    
+                    Text("Plant romantische Dates, teilt Erinnerungen und hinterlasst süße Nachrichten füreinander.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 10)
+                
                 NavigationLink(destination: LoveNotesOverviewView(space: space)) {
                     HStack {
                         VStack(alignment: .leading, spacing: 8) {
@@ -94,6 +107,7 @@ struct UsView: View {
             .padding(.top, 10)
         }
         .navigationTitle("Wir Zwei")
+        .background(Color(UIColor.systemGroupedBackground))
     }
 }
 

@@ -1,0 +1,87 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "7A363F3C",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "8.99",
+      "familyShareable" : false,
+      "internalID" : "6761265067",
+      "localizations" : [
+        {
+          "description" : "Spendiere uns ein Date",
+          "displayName" : "Date",
+          "locale" : "de"
+        }
+      ],
+      "productID" : "tip.date",
+      "referenceName" : "Trinkgeld: Date",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "6761264871",
+      "localizations" : [
+        {
+          "description" : "Gib mir einen Kaffee aus",
+          "displayName" : "Tasse Kaffee",
+          "locale" : "de"
+        }
+      ],
+      "productID" : "tip.coffee",
+      "referenceName" : "Trinkgeld: Kaffee",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "3.99",
+      "familyShareable" : false,
+      "internalID" : "6761264787",
+      "localizations" : [
+        {
+          "description" : "Gib mir ein Stück Pizza aus",
+          "displayName" : "Stück Pizza",
+          "locale" : "de"
+        }
+      ],
+      "productID" : "tip.pizza",
+      "referenceName" : "Trinkgeld: Pizza",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6761264756",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "U5XU7Z3LFF",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 796312352.31000805,
+    "_locale" : "de",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "DEU",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

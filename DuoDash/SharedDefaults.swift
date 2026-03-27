@@ -11,6 +11,7 @@ import Foundation
 struct SpaceInfo: Codable, Hashable, Identifiable {
     let id: String
     let title: String
+    let joinDate: Date
 }
 
 struct NoteInfo: Codable {

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TogetherStatsCard: View {
+struct OLD__TogetherStatsCard: View {
     
     @ObservedObject var space: SharedSpace
     
@@ -69,28 +69,28 @@ struct TogetherStatsCard: View {
             VStack(spacing: 8) {
                 // Wir berechnen die Einzelwerte relativ zu 'context.date' (jetzt)
                 
-                SingleStatRow(
+                OLD__SingleStatRow(
                     value: Int(currentDate.timeIntervalSince(space.joinDate ?? Date())),
                     unit: "Sekunden"
                 )
                 
-                OrSeparator()
+                OLD__OrSeparator()
                 
-                SingleStatRow(
+                OLD__SingleStatRow(
                     value: Int(currentDate.timeIntervalSince(space.joinDate ?? Date()) / 60),
                     unit: "Minuten"
                 )
                 
-                OrSeparator()
+                OLD__OrSeparator()
                 
-                SingleStatRow(
+                OLD__SingleStatRow(
                     value: Int(currentDate.timeIntervalSince(space.joinDate ?? Date()) / 3600),
                     unit: "Stunden"
                 )
                 
-                OrSeparator()
+                OLD__OrSeparator()
                 
-                SingleStatRow(
+                OLD__SingleStatRow(
                     value: Calendar.current.dateComponents([.day], from: space.joinDate ?? Date(), to: currentDate).day ?? 0,
                     unit: "Tage"
                 )
@@ -129,7 +129,7 @@ struct TogetherStatsCard: View {
 }
 
 
-struct SingleStatRow: View {
+struct OLD__SingleStatRow: View {
     let value: Int
     let unit: String
     
@@ -155,7 +155,7 @@ struct SingleStatRow: View {
     }
 }
 
-struct OrSeparator: View {
+struct OLD__OrSeparator: View {
     var body: some View {
         Text("- oder -")
             .font(.caption2)

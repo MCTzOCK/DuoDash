@@ -12,5 +12,6 @@ import SwiftUI
 struct DuoDashWidgetBundle: WidgetBundle {
     var body: some Widget {
         DuoDashLoveNoteWidget()
+        DuoDashTogetherWidget()
     }
 }
